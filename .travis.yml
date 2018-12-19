@@ -1,0 +1,23 @@
+# travis-ci sandbox-celery-rabbitmq
+
+language: python
+
+python:
+  - 3.6
+
+before_install:
+  - pip install --upgrade pip
+  - pip install -r requirements-test.txt
+  - make pep8
+
+install:
+  - make requirements
+
+script:
+  - make test
+
+after_success:
+  coveralls
+
+notifications:
+  email: false
