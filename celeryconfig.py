@@ -1,6 +1,7 @@
 from decouple import config
 
-BROKER_URL = config('RABBITMQ_URL', default='amqp://guest:guest@localhost:5672/')
+BROKER_URL = config('RABBITMQ_URL',
+                    default='amqp://guest:guest@localhost:5672/')
 
 TASK_SERIALIZER = 'json'
 RESULT_SERIALIZER = 'json'

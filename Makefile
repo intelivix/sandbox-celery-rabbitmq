@@ -4,7 +4,7 @@
 
 .PHONY: all help
 
-all: help requirements check_rabbitmq clean celery celery.beat celery.purge celery.kill celery.two celery.ten pep8 rabbitmq.config test test.failfirst test.collect coverage coverage.skip.covered coverage.html coveralls
+all: help requirements check_rabbitmq clean celery celery.beat celery.purge celery.kill celery.two celery.ten pep8 rabbitmq.config test test.dev test.failfirst test.collect test.skip.covered coverage coverage.html coveralls
 
 help:
 	@echo 'Makefile *** alpha *** Makefile'
@@ -24,7 +24,7 @@ clean:
 	@find . -name '*~' -exec rm -f {} \;
 
 pep8:
-	@pycodestyle --filename="*.py" --ignore=W --exclude="manage.py,settings.py,migrations" --show-source --show-pep8 --statistics --count --format='%(path)s|%(row)d|%(col)d| [%(code)s] %(text)s' .
+	@pycodestyle --filename="*.py" .
 
 celery:
 	@celery -A tasks worker --loglevel=INFO -c 1 -Q default
@@ -50,7 +50,10 @@ rabbitmq.config:
 	@rabbitmqctl set_permissions -p sandbox_host sandbox_user ".*" ".*" ".*"
 
 test: check.test_path
-	@py.test -s $(TEST_PATH) --basetemp=tests/media --disable-pytest-warnings
+	@py.test -s $(TEST_PATH) --cov --cov-report term-missing --basetemp=tests/media --disable-pytest-warnings
+
+test.dev: check.test_path
+	@py.test -s $(TEST_PATH) --cov --cov-fail-under 70 --cov-report term-missing --basetemp=tests/media --disable-pytest-warnings
 
 test.failfirst: check.test_path
 	@py.test -s -x $(TEST_PATH) --basetemp=tests/media --disable-pytest-warnings
@@ -58,14 +61,13 @@ test.failfirst: check.test_path
 test.collect: check.test_path
 	@py.test -s $(TEST_PATH) --basetemp=tests/media --collect-only --disable-pytest-warnings
 
-coverage: check.test_path
-	@py.test -s $(TEST_PATH) --cov --cov-fail-under 70 --cov-report term-missing --doctest-modules --basetemp=tests/media --disable-pytest-warnings
+test.skip.covered: check.test_path
+	@py.test -s $(TEST_PATH) --cov --cov-report term:skip-covered --doctest-modules --basetemp=tests/media --disable-pytest-warnings
 
-coverage.skip.covered: check.test_path
-	@py.test -s $(TEST_PATH) --cov --cov-fail-under 70 --cov-report term:skip-covered --doctest-modules --basetemp=tests/media --disable-pytest-warnings
+coverage: check.test_path test
 
 coverage.html: check.test_path
-	@py.test -s $(TEST_PATH) --cov --cov-fail-under 70 --cov-report html --doctest-modules --basetemp=tests/media --disable-pytest-warnings
+	@py.test -s $(TEST_PATH) --cov --cov-report html --doctest-modules --basetemp=tests/media --disable-pytest-warnings
 
 coveralls: coverage
 	@coveralls
