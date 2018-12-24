@@ -14,7 +14,7 @@
                 "sqs:GetQueueAttributes",
                 "sqs:ChangeMessageVisibilityBatch"
             ],
-            "Resource": "arn:aws:sqs:<REGION>:<ACCOUNT_ID>:<QUEUE_NAME>"
+            "Resource": "{{ queue_arn }}"
         },
         {
             "Effect": "Allow",

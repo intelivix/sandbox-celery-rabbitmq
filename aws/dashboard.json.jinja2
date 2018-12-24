@@ -1,0 +1,98 @@
+{
+    "widgets": [
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 0,
+            "width": 18,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "NumberOfMessagesSent", "QueueName", "{{ queue_name }}", { "stat": "Sum", "label": "Mensagens Recebidas", "color": "#9edae5" } ],
+                    [ ".", "NumberOfMessagesReceived", ".", ".", { "stat": "Sum", "label": "Mensagens Enviadas" } ],
+                    [ ".", "NumberOfMessagesDeleted", ".", ".", { "stat": "Sum", "label": "Mensagens Removidas" } ],
+                    [ ".", "ApproximateNumberOfMessagesVisible", ".", ".", { "stat": "Sum", "label": "Total de Mensagens", "color": "#1f77b4" } ],
+                    [ "...", "{{ queue_name }}-DEAD-LETTER", { "stat": "Sum", "label": "Mensagens com Erros", "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Mensagens na Fila",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "label": "Contagem de Mensagens",
+                        "showUnits": false
+                    },
+                    "right": {
+                        "label": "Hora de Execução",
+                        "showUnits": false
+                    }
+                },
+                "legend": {
+                    "position": "right"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 3,
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "{{ queue_name }}-DEAD-LETTER", { "label": "Total de Mensagens com Erro", "stat": "Sum" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": " ",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "label": "Contagem de Mensagens",
+                        "showUnits": false
+                    },
+                    "right": {
+                        "label": "Hora de Execução",
+                        "showUnits": false
+                    }
+                },
+                "legend": {
+                    "position": "right"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 3,
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "{{ queue_name }}", { "label": "Total de Mensagens", "yAxis": "left", "stat": "Sum" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": " ",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "label": "Contagem de Mensagens",
+                        "showUnits": false
+                    },
+                    "right": {
+                        "label": "Hora de Execução",
+                        "showUnits": false
+                    }
+                },
+                "legend": {
+                    "position": "right"
+                }
+            }
+        }
+    ]
+}

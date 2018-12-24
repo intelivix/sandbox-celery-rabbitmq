@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+    worker:
+        image: worker-loafer
+        container_name: worker-loafer
+        build:
+            context: .
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        command: "/app/src/.venv/bin/python -m workers"
+        logging:
+            driver: "awslogs"
+            options:
+                awslogs-region: "us-east-1"
+                awslogs-group: "loafer-workers"
+                awslogs-stream: "worker"
+                awslogs-create-group: "true"
