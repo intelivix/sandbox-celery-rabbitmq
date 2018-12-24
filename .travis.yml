@@ -1,23 +1,35 @@
 # travis-ci sandbox-celery-rabbitmq
 
+sudo: required
+
 language: python
+
+services:
+  - docker
 
 python:
   - 3.6
 
 before_install:
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, TRAVIS_TAG=$TRAVIS_TAG"
   - pip install --upgrade pip
-  - pip install -r requirements-test.txt
+  - pip install pipenv
+  - pipenv install --system --dev
   - make pep8
 
 install:
-  - make requirements
+  - echo "nothing to install!"
 
 script:
   - make test
 
 after_success:
-  coveralls
+  - coveralls
+  - docker --version
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+  - make docker.login
+  - make docker.build
+  - make docker.push
 
 notifications:
   email: false
