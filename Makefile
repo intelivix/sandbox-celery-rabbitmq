@@ -80,7 +80,7 @@ coveralls: coverage
 ### DOCKER
 
 DOCKER_NAME := intelivix/loafer
-DOCKER_TAG := $$(if [ "${TRAVIS_TAG}" == "" ]; then echo `git log -1 --pretty=%h`; else echo "${TRAVIS_TAG}"; fi)
+DOCKER_TAG := $$(if [ "${TRAVIS_TAG}" = "" ]; then echo `git log -1 --pretty=%h`; else echo "${TRAVIS_TAG}"; fi)
 DOCKER_IMG_TAG := ${DOCKER_NAME}:${DOCKER_TAG}
 DOCKER_LATEST := ${DOCKER_NAME}:latest
 
